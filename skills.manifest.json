@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "sourcePlugin": "onprem-atlassian",
+  "skillCount": 15,
+  "skills": [
+    {
+      "name": "atlassian-cross-product-research",
+      "path": "skills/atlassian-cross-product-research/SKILL.md",
+      "description": "Combine Jira and Confluence evidence for project status, incidents, release notes, audits, requirements, and implementation context.",
+      "sha256": "f091fb3dd020ad42fedae42f578104988eede0a76a3bb91da591e9c7c6422e15"
+    },
+    {
+      "name": "atlassian-reporting",
+      "path": "skills/atlassian-reporting/SKILL.md",
+      "description": "Produce Atlassian reports such as weekly status, project health, delivery risk, release readiness, incident follow-up, and action registers.",
+      "sha256": "9f6a1304c6ccd3aff10033109029cebe8b04323eff4777595ea9ef5683e14466"
+    },
+    {
+      "name": "confluence-knowledge-synthesis",
+      "path": "skills/confluence-knowledge-synthesis/SKILL.md",
+      "description": "Synthesize Confluence knowledge across multiple pages into briefs, architecture summaries, onboarding notes, FAQs, or decision histories.",
+      "sha256": "1de0ffcd3c4fbcdbc61d70eb5e5df3a0c046e190f2bc29d32146b7bd84c66b2f"
+    },
+    {
+      "name": "confluence-page-authoring",
+      "path": "skills/confluence-page-authoring/SKILL.md",
+      "description": "Draft or create Confluence pages, meeting notes, decision records, project briefs, release notes, and technical documentation.",
+      "sha256": "eb8d2e06fe0d5a7cc7abc5a1633f2d28011899e978ce4af8b05eb84c10c73e92"
+    },
+    {
+      "name": "confluence-page-maintenance",
+      "path": "skills/confluence-page-maintenance/SKILL.md",
+      "description": "Maintain Confluence pages by identifying stale content, duplicate pages, missing labels, broken structure, and update candidates.",
+      "sha256": "25f397680c089aeadc0a07fc412a7164a11699116ad87fd9dd5a5519bb35c754"
+    },
+    {
+      "name": "confluence-runbooks",
+      "path": "skills/confluence-runbooks/SKILL.md",
+      "description": "Create, review, or improve Confluence operational runbooks, SOPs, troubleshooting guides, and support playbooks.",
+      "sha256": "d341415916b1384b443a855b5db68fdc0a89802ba2df3cb8d5ddfa158a3c862e"
+    },
+    {
+      "name": "confluence-search",
+      "path": "skills/confluence-search/SKILL.md",
+      "description": "Search on-prem Confluence spaces, pages, titles, labels, ancestors, contributors, and page content through the onprem-atlassian MCP server.",
+      "sha256": "e919924719ea44a354e79240ae0c241c6fd3cad9ad2eabfb53246d70a40278d0"
+    },
+    {
+      "name": "jira-admin-lookup",
+      "path": "skills/jira-admin-lookup/SKILL.md",
+      "description": "Look up Jira projects, users, issue types, statuses, fields, priorities, versions, components, boards, and workflows.",
+      "sha256": "fb26f2d48f39fd319ac2329f04e9a15832d1f797f00245e3775fed2ad29aba00"
+    },
+    {
+      "name": "jira-incident-management",
+      "path": "skills/jira-incident-management/SKILL.md",
+      "description": "Work with Jira incident, problem, RCA, outage, hotfix, or operational follow-up tickets and summarize status or next actions.",
+      "sha256": "d9ca11f436f320408f01ae078640a8acd05151c6d3849c927435ea665f5d47e3"
+    },
+    {
+      "name": "jira-issue-search",
+      "path": "skills/jira-issue-search/SKILL.md",
+      "description": "Search on-prem Jira with JQL, issue keys, project filters, assignees, statuses, labels, or free-text intent through the onprem-atlassian MCP server.",
+      "sha256": "3899fb0f38c83e16f3d5ab4af3ee6114fa6e7af9b21edf6a27406dcae79b6e24"
+    },
+    {
+      "name": "jira-issue-triage",
+      "path": "skills/jira-issue-triage/SKILL.md",
+      "description": "Triage Jira issues by severity, priority, ownership, blockers, stale activity, SLA risk, duplicates, or next action.",
+      "sha256": "3e135692c2fa25f87fa7df6f55afbb239aeaf02272b56b913be5bba6e9f3ef42"
+    },
+    {
+      "name": "jira-issue-write",
+      "path": "skills/jira-issue-write/SKILL.md",
+      "description": "Create or update Jira issues, comments, summaries, descriptions, labels, assignees, priorities, links, or transitions after explicit user intent.",
+      "sha256": "3e6bf524be0839ca236a896e9d2e2a685c497db93e53cd6d6d6f72a771bc8718"
+    },
+    {
+      "name": "jira-release-reporting",
+      "path": "skills/jira-release-reporting/SKILL.md",
+      "description": "Build Jira release notes, fix-version summaries, deployment readiness reports, change logs, and unresolved-risk lists.",
+      "sha256": "69fe17e08c24c29f25a8b229c66c31721ded121b24af83cdb752d41086a5252e"
+    },
+    {
+      "name": "jira-sprint-planning",
+      "path": "skills/jira-sprint-planning/SKILL.md",
+      "description": "Review Jira boards, backlogs, active sprints, sprint readiness, capacity signals, carryover, blockers, and sprint commitments.",
+      "sha256": "b09dcff73ca6091193fc707627ac4b7d703468031f61691b01d91bbd8e4f3022"
+    },
+    {
+      "name": "jira-ticket-authoring",
+      "path": "skills/jira-ticket-authoring/SKILL.md",
+      "description": "Draft well-structured Jira bugs, stories, tasks, epics, subtasks, acceptance criteria, reproduction steps, and implementation notes.",
+      "sha256": "8a462e4f71ce5d467b2bdb124de9b4db6f37d28bfc83a83911a5da1e1313bf04"
+    }
+  ]
+}
