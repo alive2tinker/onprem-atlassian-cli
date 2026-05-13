@@ -1,8 +1,8 @@
-# On-Prem Atlassian CLI
+# atli
 
-Cross-platform local-AI CLI for on-prem Jira and Confluence.
+Short, namespace-first local-AI CLI for on-prem Jira and Confluence.
 
-This is the command-line version of the `onprem-atlassian` Codex plugin. It uses:
+`atli` is the command-line version of the `onprem-atlassian` Codex plugin. It uses:
 
 - Local AI through Ollama by default.
 - Any OpenAI-compatible local endpoint, such as LM Studio, with a flag.
@@ -37,10 +37,13 @@ If npm is available, you can also install directly:
 npm install -g .
 ```
 
-The install scripts create two commands:
+The install scripts create three commands:
 
-- `onprem-atlassian`
+- `atli`
 - `atlas-ai`
+- `onprem-atlassian`
+
+`atli` is the primary command. The other two are compatibility aliases.
 
 ## Environment
 
@@ -67,13 +70,13 @@ Set `JIRA_URL` to your Jira base URL, for example `https://jira.example.com`.
 Default Ollama usage:
 
 ```sh
-onprem-atlassian ai "Draft a Jira bug for failed login after password reset" --model llama3.1
+atli ai chat "Draft a Jira bug for failed login after password reset" --model llama3.1
 ```
 
 Use LM Studio or another local OpenAI-compatible endpoint:
 
 ```sh
-onprem-atlassian ai "Summarize this release plan" \
+atli ai chat "Summarize this release plan" \
   --provider openai-compatible \
   --base-url http://127.0.0.1:1234/v1 \
   --model local-model
@@ -90,27 +93,29 @@ export ONPREM_ATLASSIAN_AI_BASE_URL=http://127.0.0.1:11434
 ## Commands
 
 ```sh
-onprem-atlassian doctor
-onprem-atlassian doctor --mcp
-onprem-atlassian skills list
-onprem-atlassian skills show jira-issue-search
-onprem-atlassian confluence skills
-onprem-atlassian confluence search "release process"
-onprem-atlassian confluence draft "runbook for payment retry failures" --no-mcp
-onprem-atlassian confluence ask "Summarize the runbooks for service ABC"
-onprem-atlassian jira skills
-onprem-atlassian jira ask "Find open blockers in project ABC"
-onprem-atlassian ai "Draft acceptance criteria for a payment retry story"
-onprem-atlassian ask "Find open blockers in project ABC"
-onprem-atlassian ask "Draft a Confluence release note from these issues" --no-mcp
-onprem-atlassian mcp tools
-onprem-atlassian mcp call jira_search --args '{"jql":"project = ABC ORDER BY updated DESC"}'
+atli doctor
+atli doctor --mcp
+atli skills list
+atli skills show jira-issue-search
+atli ai chat "Draft acceptance criteria for a payment retry story"
+atli ai ask "Find open blockers in project ABC"
+atli jira skills
+atli jira ask "Find open blockers in project ABC"
+atli jira search "project = ABC ORDER BY updated DESC"
+atli jira triage "active sprint for team ABC"
+atli jira draft "bug for failed login after password reset"
+atli confluence skills
+atli confluence ask "Summarize the runbooks for service ABC"
+atli confluence search "release process"
+atli confluence draft "runbook for payment retry failures" --no-mcp
+atli mcp tools
+atli mcp call jira_search --args '{"jql":"project = ABC ORDER BY updated DESC"}'
 ```
 
-`ask` runs a local-AI agent loop. By default it can read from Jira/Confluence through MCP, but it will not perform writes unless you pass:
+`ai ask`, `jira ask`, and `confluence ask` run a local-AI agent loop. By default they can read from Jira/Confluence through MCP, but they will not perform writes unless you pass:
 
 ```sh
-onprem-atlassian ask "Comment on ABC-123 with this update: ..." --write-ok
+atli ai ask "Comment on ABC-123 with this update: ..." --write-ok
 ```
 
 ## Ported Skills

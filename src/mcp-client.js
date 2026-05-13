@@ -49,8 +49,8 @@ export class McpClient {
       protocolVersion: DEFAULT_PROTOCOL_VERSION,
       capabilities: {},
       clientInfo: {
-        name: "onprem-atlassian-cli",
-        version: "0.1.1"
+        name: "atli",
+        version: "0.2.0"
       }
     });
     this.notify("notifications/initialized", {});

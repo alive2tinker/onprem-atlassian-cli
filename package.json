@@ -1,12 +1,13 @@
 {
-  "name": "@local/onprem-atlassian-cli",
-  "version": "0.1.1",
-  "description": "Cross-platform local-AI CLI for on-prem Jira and Confluence via mcp-atlassian.",
+  "name": "atli",
+  "version": "0.2.0",
+  "description": "Short namespace-first local-AI CLI for on-prem Jira and Confluence via mcp-atlassian.",
   "license": "MIT",
   "type": "module",
   "bin": {
-    "onprem-atlassian": "./bin/onprem-atlassian.js",
-    "atlas-ai": "./bin/onprem-atlassian.js"
+    "atli": "./bin/atli.js",
+    "atlas-ai": "./bin/atli.js",
+    "onprem-atlassian": "./bin/atli.js"
   },
   "engines": {
     "node": ">=20"
@@ -21,8 +22,8 @@
     "README.md"
   ],
   "scripts": {
-    "doctor": "node ./bin/onprem-atlassian.js doctor",
-    "skills": "node ./bin/onprem-atlassian.js skills list",
+    "doctor": "node ./bin/atli.js doctor",
+    "skills": "node ./bin/atli.js skills list",
     "verify:skills": "node ./scripts/verify-skills.mjs",
     "sync:skills": "node ./scripts/sync-skills.mjs"
   }

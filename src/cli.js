@@ -1,26 +1,34 @@
-import { readFile } from "node:fs/promises";
 import { aiDefaults, chat, checkAi } from "./local-ai.js";
 import { loadSkills, filterSkills, skillsPrompt } from "./skills.js";
 import { commandExists, parseFlags, printTable, asArray } from "./util.js";
 import { loadMcpServerConfig, withMcp } from "./mcp-client.js";
 import { runAgent } from "./agent.js";
 
-const HELP = `onprem-atlassian - local-AI CLI for on-prem Jira and Confluence
+const CLI_NAME = "atli";
+const VERSION = "0.2.0";
+
+const HELP = `atli - local-AI CLI for on-prem Jira and Confluence
 
 Usage:
-  onprem-atlassian ask "question" [--model llama3.1] [--provider ollama] [--no-mcp] [--write-ok]
-  onprem-atlassian ai "prompt" [--skill jira-issue-search]
-  onprem-atlassian confluence skills
-  onprem-atlassian confluence ask "question"
-  onprem-atlassian confluence search "query"
-  onprem-atlassian confluence draft "page brief"
-  onprem-atlassian jira skills
-  onprem-atlassian jira ask "question"
-  onprem-atlassian skills list
-  onprem-atlassian skills show <name>
-  onprem-atlassian mcp tools
-  onprem-atlassian mcp call <tool-name> --args '{"key":"value"}'
-  onprem-atlassian doctor [--mcp]
+  atli ai chat "prompt" [--model llama3.1] [--provider ollama]
+  atli ai ask "question" [--model llama3.1] [--no-mcp] [--write-ok]
+  atli jira skills
+  atli jira ask "question"
+  atli jira search "query or JQL"
+  atli jira triage "scope"
+  atli jira draft "ticket brief"
+  atli confluence skills
+  atli confluence ask "question"
+  atli confluence search "query"
+  atli confluence draft "page brief"
+  atli skills list
+  atli skills show <name>
+  atli mcp tools
+  atli mcp call <tool-name> --args '{"key":"value"}'
+  atli doctor [--mcp]
+
+Compatibility aliases:
+  atlas-ai, onprem-atlassian
 
 Local AI:
   Default provider is Ollama at http://127.0.0.1:11434 with model llama3.1.
@@ -67,19 +75,37 @@ export async function main(argv) {
     return;
   }
   if (command === "version" || command === "--version") {
-    console.log("0.1.1");
+    console.log(VERSION);
     return;
   }
 
   if (command === "skills") return skillsCommand(args.slice(1));
   if (command === "confluence") return domainCommand("confluence", args.slice(1));
   if (command === "jira") return domainCommand("jira", args.slice(1));
-  if (command === "ai") return aiCommand(args.slice(1));
+  if (command === "ai") return aiNamespaceCommand(args.slice(1));
   if (command === "ask") return askCommand(args.slice(1));
   if (command === "mcp") return mcpCommand(args.slice(1));
   if (command === "doctor") return doctorCommand(args.slice(1));
 
-  throw new Error(`Unknown command '${command}'. Run onprem-atlassian help.`);
+  throw new Error(`Unknown command '${command}'. Run ${CLI_NAME} help.`);
+}
+
+async function aiNamespaceCommand(args) {
+  const subcommand = args[0] || "chat";
+
+  if (subcommand === "chat" || subcommand === "prompt") {
+    return aiCommand(args.slice(1));
+  }
+
+  if (subcommand === "ask") {
+    return askCommand(args.slice(1));
+  }
+
+  if (subcommand === "doctor") {
+    return doctorCommand(args.slice(1));
+  }
+
+  return aiCommand(args);
 }
 
 function domainSkillNames(domain) {
@@ -159,6 +185,45 @@ async function domainCommand(domain, args) {
       "confluence-page-authoring",
       "--skill",
       "confluence-runbooks",
+      ...flagTokens(rest)
+    ]);
+  }
+
+  if (domain === "jira" && subcommand === "search") {
+    const rest = args.slice(1);
+    const flags = parseFlags(rest);
+    const query = requireArg(flags._.join(" ").trim(), "Jira search query or JQL");
+    return askCommand([
+      `Search Jira for: ${query}`,
+      "--skill",
+      "jira-issue-search",
+      ...flagTokens(rest)
+    ]);
+  }
+
+  if (domain === "jira" && subcommand === "triage") {
+    const rest = args.slice(1);
+    const flags = parseFlags(rest);
+    const scope = requireArg(flags._.join(" ").trim(), "Jira triage scope");
+    return askCommand([
+      `Triage Jira work for: ${scope}`,
+      "--skill",
+      "jira-issue-triage",
+      "--skill",
+      "jira-issue-search",
+      ...flagTokens(rest)
+    ]);
+  }
+
+  if (domain === "jira" && subcommand === "draft") {
+    const rest = args.slice(1);
+    const flags = parseFlags(rest);
+    const brief = requireArg(flags._.join(" ").trim(), "Jira ticket brief");
+    return askCommand([
+      `Draft Jira ticket content for: ${brief}`,
+      "--skill",
+      "jira-ticket-authoring",
+      "--no-mcp",
       ...flagTokens(rest)
     ]);
   }
