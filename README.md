@@ -94,6 +94,12 @@ onprem-atlassian doctor
 onprem-atlassian doctor --mcp
 onprem-atlassian skills list
 onprem-atlassian skills show jira-issue-search
+onprem-atlassian confluence skills
+onprem-atlassian confluence search "release process"
+onprem-atlassian confluence draft "runbook for payment retry failures" --no-mcp
+onprem-atlassian confluence ask "Summarize the runbooks for service ABC"
+onprem-atlassian jira skills
+onprem-atlassian jira ask "Find open blockers in project ABC"
 onprem-atlassian ai "Draft acceptance criteria for a payment retry story"
 onprem-atlassian ask "Find open blockers in project ABC"
 onprem-atlassian ask "Draft a Confluence release note from these issues" --no-mcp

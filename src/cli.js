@@ -10,6 +10,12 @@ const HELP = `onprem-atlassian - local-AI CLI for on-prem Jira and Confluence
 Usage:
   onprem-atlassian ask "question" [--model llama3.1] [--provider ollama] [--no-mcp] [--write-ok]
   onprem-atlassian ai "prompt" [--skill jira-issue-search]
+  onprem-atlassian confluence skills
+  onprem-atlassian confluence ask "question"
+  onprem-atlassian confluence search "query"
+  onprem-atlassian confluence draft "page brief"
+  onprem-atlassian jira skills
+  onprem-atlassian jira ask "question"
   onprem-atlassian skills list
   onprem-atlassian skills show <name>
   onprem-atlassian mcp tools
@@ -27,6 +33,20 @@ Environment:
 function requireArg(value, label) {
   if (!value) throw new Error(`Missing ${label}.`);
   return value;
+}
+
+function flagTokens(args) {
+  const tokens = [];
+  for (let index = 0; index < args.length; index += 1) {
+    const token = args[index];
+    if (!token.startsWith("--")) continue;
+    tokens.push(token);
+    if (!token.includes("=") && args[index + 1] && !args[index + 1].startsWith("--")) {
+      tokens.push(args[index + 1]);
+      index += 1;
+    }
+  }
+  return tokens;
 }
 
 function parseJsonArg(value, label = "JSON") {
@@ -47,17 +67,103 @@ export async function main(argv) {
     return;
   }
   if (command === "version" || command === "--version") {
-    console.log("0.1.0");
+    console.log("0.1.1");
     return;
   }
 
   if (command === "skills") return skillsCommand(args.slice(1));
+  if (command === "confluence") return domainCommand("confluence", args.slice(1));
+  if (command === "jira") return domainCommand("jira", args.slice(1));
   if (command === "ai") return aiCommand(args.slice(1));
   if (command === "ask") return askCommand(args.slice(1));
   if (command === "mcp") return mcpCommand(args.slice(1));
   if (command === "doctor") return doctorCommand(args.slice(1));
 
   throw new Error(`Unknown command '${command}'. Run onprem-atlassian help.`);
+}
+
+function domainSkillNames(domain) {
+  if (domain === "confluence") {
+    return [
+      "confluence-search",
+      "confluence-page-authoring",
+      "confluence-page-maintenance",
+      "confluence-runbooks",
+      "confluence-knowledge-synthesis",
+      "atlassian-cross-product-research",
+      "atlassian-reporting"
+    ];
+  }
+
+  if (domain === "jira") {
+    return [
+      "jira-issue-search",
+      "jira-issue-triage",
+      "jira-issue-write",
+      "jira-ticket-authoring",
+      "jira-sprint-planning",
+      "jira-release-reporting",
+      "jira-incident-management",
+      "jira-admin-lookup",
+      "atlassian-cross-product-research",
+      "atlassian-reporting"
+    ];
+  }
+
+  return [];
+}
+
+async function domainCommand(domain, args) {
+  const subcommand = args[0] || "skills";
+  const skillNames = domainSkillNames(domain);
+  const skills = await loadSkills();
+  const selectedSkills = skills.filter((skill) => skillNames.includes(skill.name));
+
+  if (subcommand === "skills") {
+    printTable(selectedSkills.map((skill) => ({
+      name: skill.name,
+      description: skill.description
+    })), [
+      { key: "name", label: "Skill" },
+      { key: "description", label: "Description" }
+    ]);
+    return;
+  }
+
+  if (subcommand === "ask") {
+    const rest = args.slice(1);
+    return askCommand([...rest, ...skillNames.flatMap((name) => ["--skill", name])]);
+  }
+
+  if (domain === "confluence" && subcommand === "search") {
+    const rest = args.slice(1);
+    const flags = parseFlags(rest);
+    const query = requireArg(flags._.join(" ").trim(), "Confluence search query");
+    return askCommand([
+      `Search Confluence for: ${query}`,
+      "--skill",
+      "confluence-search",
+      "--skill",
+      "confluence-knowledge-synthesis",
+      ...flagTokens(rest)
+    ]);
+  }
+
+  if (domain === "confluence" && subcommand === "draft") {
+    const rest = args.slice(1);
+    const flags = parseFlags(rest);
+    const brief = requireArg(flags._.join(" ").trim(), "Confluence page brief");
+    return askCommand([
+      `Draft Confluence page content for: ${brief}`,
+      "--skill",
+      "confluence-page-authoring",
+      "--skill",
+      "confluence-runbooks",
+      ...flagTokens(rest)
+    ]);
+  }
+
+  throw new Error(`Unknown ${domain} command '${subcommand}'.`);
 }
 
 async function skillsCommand(args) {
